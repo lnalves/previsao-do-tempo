@@ -21,23 +21,32 @@ O software foi estruturado para separar a lógica de negócios, a interface do u
 ## Como Executar o Projeto
 
 1. Clonar o Repositório
-  git clone [https://github.com/lnalves/previsao-do-tempo.git](https://github.com/lnalves/previsao-do-tempo.git)
 
-2. Configurar o Banco de Dados
-  Navegue até a pasta script sql no diretório do projeto.
+git clone [https://github.com/lnalves/previsao-do-tempo.git](https://github.com/lnalves/previsao-do-tempo.git)
 
-  Abra o arquivo de script (ex: script.sql ou similar) em seu cliente de banco de dados (MySQL Workbench, DBeaver, etc.).
+3. Configurar o Banco de Dados
 
-  Execute o script para criar o banco de dados e as tabelas necessárias.
+Navegue até a pasta script sql no diretório do projeto.
+
+Abra o arquivo de script (ex: script.sql ou similar) em seu cliente de banco de dados (MySQL Workbench, DBeaver, etc.).
+
+Execute o script para criar o banco de dados e as tabelas necessárias.
 
 3. Configurar a Conexão
-  Abra o projeto na sua IDE.
-  Navegue até o pacote dal (Data Access Layer).
-  Localize a classe de conexão(nomeada Conexao.java neste projeto).
-  Verifique se as credenciais (URL do banco, usuário e senha) correspondem às do seu banco de dados local. Caso necessário, altere-as.
+   
+Abra o projeto na sua IDE.
+  
+Navegue até o pacote dal (Data Access Layer).
+  
+Localize a classe de conexão(nomeada Conexao.java neste projeto).
+  
+Verifique se as credenciais (URL do banco, usuário e senha) correspondem às do seu banco de dados local. Caso necessário, altere-as.
 
 5. Importar Dependências
-  Certifique-se de que os arquivos .jar localizados na pasta lib estejam adicionados ao Classpath ou às Bibliotecas do seu projeto na IDE.
 
-6. Rodar a Aplicação
-  Navegue até o pacote view.
+Certifique-se de que os arquivos .jar localizados na pasta lib estejam adicionados ao Classpath ou às Bibliotecas do seu projeto na IDE.
+
+7. Rodar a Aplicação
+
+Navegue até o pacote view.
+Execute App.java
