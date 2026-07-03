@@ -1,0 +1,3 @@
+# MySQL via Docker Compose instead of an embedded database
+
+A desktop app that anyone clones from GitHub would run friction-free with an embedded database (SQLite/H2), and a reviewer might reasonably ask why a Swing app carries a MySQL + Docker dependency. We deliberately kept MySQL — the SQL schema and a real relational database are part of what this project demonstrates — and added a `docker-compose.yml` so the database still comes up with a single command, schema and seed data included. Embedded alternatives were rejected because they would erase the MySQL skill signal (SQLite) or demonstrate a database nobody hires for (H2).

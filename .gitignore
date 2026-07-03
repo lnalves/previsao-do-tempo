@@ -1,0 +1,10 @@
+# Build output
+out/
+target/
+*.class
+
+# IDE
+.idea/workspace.xml
+
+# Local configuration (never commit credentials)
+config.properties
