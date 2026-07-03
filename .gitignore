@@ -8,3 +8,4 @@ target/
 
 # Local configuration (never commit credentials)
 config.properties
+dependency-reduced-pom.xml

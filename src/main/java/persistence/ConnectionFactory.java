@@ -9,7 +9,8 @@ import java.util.Properties;
 
 /**
  * Opens JDBC connections. Resolution order per setting: environment variable,
- * then config.properties on the classpath, then defaults matching docker-compose.yml.
+ * then system property, then config.properties on the classpath, then
+ * defaults matching docker-compose.yml.
  */
 public final class ConnectionFactory {
 
@@ -29,6 +30,10 @@ public final class ConnectionFactory {
         String env = System.getenv(envVar);
         if (env != null && !env.isBlank()) {
             return env;
+        }
+        String sysProp = System.getProperty(propKey);
+        if (sysProp != null && !sysProp.isBlank()) {
+            return sysProp;
         }
         return FILE_PROPS.getProperty(propKey, defaultValue);
     }

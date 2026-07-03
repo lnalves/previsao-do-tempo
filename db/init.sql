@@ -1,6 +1,10 @@
 -- Schema for the Weather Forecast app.
 -- Runs automatically on first startup via docker-entrypoint-initdb.d.
 
+-- The entrypoint's mysql client defaults to latin1; without this, accented
+-- seed data (e.g. "São Paulo") is stored as mojibake.
+SET NAMES utf8mb4;
+
 CREATE TABLE location (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
