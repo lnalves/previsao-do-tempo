@@ -1,53 +1,57 @@
-# Previsão do Tempo
+# Weather Forecast
 
-Este é um projeto de aplicação Desktop desenvolvida em **Java** para gerenciamento e visualização de dados de previsão do tempo.
-O sistema utiliza a API open-meteo.com para buscar dados em tempo real de execução e atualizar a interface. Além disso, usa arquitetura em camadas (MVC) e persistência de dados via banco de dados SQL.
+[![CI](https://github.com/lnalves/previsao-do-tempo/actions/workflows/ci.yml/badge.svg)](https://github.com/lnalves/previsao-do-tempo/actions/workflows/ci.yml)
 
-O software foi estruturado para separar a lógica de negócios, a interface do usuário e o acesso aos dados, facilitando a manutenção e a escalabilidade.
+Java Swing desktop app that tracks current weather and 7-day forecasts for user-saved locations, powered by the [Open-Meteo API](https://open-meteo.com). Every refresh stores an observed **weather reading** and upserts the **daily forecasts**, building a queryable history over time.
 
-* **Model:** Classes que representam os dados do sistema .
-* **View:** Interface gráfica com o usuário.
-* **DAL (Data Access Layer):** Camada responsável pela comunicação com o banco de dados.
-* **Script SQL:** Scripts para criação e configuração do banco de dados.
-* **Lib:** Bibliotecas externas (dependências do projeto, como drivers de banco de dados).
+## Features
 
+- Current conditions (temperature, feels-like, precipitation) and 7-day forecast per city
+- Add cities by name via the Open-Meteo geocoding API — no manual coordinates needed
+- Reading history with date filters, joined with the forecast that existed for each day
+- All data persisted in MySQL
 
-## Tecnologias Utilizadas
+## Architecture
 
-* **Linguagem:** Java
-* **Banco de Dados:** MySQL 
-* **Interface Gráfica:** Java Swing
+```
+ui ──► service ──► api          (Open-Meteo HTTP clients + DTOs)
+              └──► persistence  (DAOs, one short-lived connection per operation)
+                        │
+                     domain     (records: Location, WeatherReading, DailyForecast)
+```
 
-## Como Executar o Projeto
+- **Java 21**, Swing (background work on `SwingWorker`, never on the EDT)
+- **MySQL 8** with unique constraints backing idempotent upserts
+- **Gson** for JSON, `java.net.http.HttpClient` for HTTP
+- See [CONTEXT.md](CONTEXT.md) for the domain glossary and [docs/adr](docs/adr) for decisions
 
-1. Clonar o Repositório
+## Quickstart
 
-git clone [https://github.com/lnalves/previsao-do-tempo.git](https://github.com/lnalves/previsao-do-tempo.git)
+Requires JDK 21+, Maven and Docker.
 
-2. Configurar o Banco de Dados
+```bash
+docker compose up -d     # MySQL with schema and seed data
+mvn package              # build + unit tests
+java -jar target/weather-forecast.jar
+```
 
-Navegue até a pasta script sql no diretório do projeto.
+Database credentials default to the ones in `docker-compose.yml`; override via environment variables (`DB_URL`, `DB_USER`, `DB_PASSWORD`) or a `config.properties` (see `src/main/resources/config.properties.example`).
 
-Abra o arquivo de script em seu cliente de banco de dados (MySQL Workbench, DBeaver, etc.).
+## Tests
 
-Execute o script para criar o banco de dados e as tabelas necessárias.
+```bash
+mvn verify
+```
 
-3. Configurar a Conexão
-   
-Abra o projeto na sua IDE.
-  
-Navegue até o pacote dal.
-  
-Localize a classe de conexão (nomeada Conexao.java neste projeto).
-  
-Verifique se as credenciais (URL do banco, usuário e senha) correspondem às do seu banco de dados local. Caso necessário, altere-as.
+Unit tests cover JSON parsing and service rules; integration tests spin up a real MySQL via Testcontainers (Docker required) and exercise the DAOs against the same `init.sql` the app uses.
 
-4. Importar Dependências
+## Known limitations
 
-Certifique-se de que os arquivos .jar localizados na pasta lib estejam adicionados ao Classpath ou às Bibliotecas do seu projeto na IDE.
+- Timezone is fixed to `America/Sao_Paulo`: readings for foreign cities are shown and stored in São Paulo time.
 
-5. Rodar a Aplicação
+## Roadmap
 
-Navegue até o pacote view.
-
-Execute App.java
+- Temperature charts in the history view
+- Weather-condition icons (`weather_code`)
+- Auto-refresh timer
+- `timezone=auto` for correct local times worldwide
