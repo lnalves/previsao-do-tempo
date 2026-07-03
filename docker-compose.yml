@@ -1,0 +1,22 @@
+services:
+  db:
+    image: mysql:8
+    container_name: weather-forecast-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_NAME:-weatherdb}
+      MYSQL_USER: ${DB_USER:-weather}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-weather}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  db_data:
