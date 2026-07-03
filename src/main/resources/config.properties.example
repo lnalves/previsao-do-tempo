@@ -1,0 +1,5 @@
+# Copy to config.properties (gitignored) to override the defaults,
+# which already match docker-compose.yml.
+db.url=jdbc:mysql://localhost:3306/weatherdb
+db.user=weather
+db.password=weather
